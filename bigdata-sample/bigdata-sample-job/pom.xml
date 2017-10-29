@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>bigdata-sample</artifactId>
+    <groupId>fr.jetoile.hadoop.sample</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>bigdata-sample-job</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-hive_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.databricks</groupId>
+      <artifactId>spark-csv_2.11</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.snappydata</groupId>
+      <artifactId>snappy-spark-unsafe_2.11</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.snappydata</groupId>
+      <artifactId>snappy-spark-tags_2.11</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch-spark-20_2.11</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>fr.jetoile.hadoop</groupId>
+      <artifactId>hadoop-unit-client-hdfs</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>fr.jetoile.hadoop</groupId>
+      <artifactId>hadoop-unit-client-hive</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>fr.jetoile.hadoop</groupId>
+      <artifactId>hadoop-unit-commons</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>transport</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+      <plugin>
+        <artifactId>hadoop-unit-maven-plugin</artifactId>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <version>${hadoop-unit.version}</version>
+        <executions>
+          <execution>
+            <id>start</id>
+            <goals>
+              <goal>embedded-start</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+          </execution>
+          <execution>
+            <id>stop</id>
+            <goals>
+              <goal>embedded-stop</goal>
+            </goals>
+            <phase>post-integration-test</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <components>
+            <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+              <componentName>HDFS</componentName>
+              <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
+            </componentArtifact>
+            <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+              <componentName>ZOOKEEPER</componentName>
+              <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+            </componentArtifact>
+            <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+              <componentName>HIVEMETA</componentName>
+              <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
+            </componentArtifact>
+            <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+              <componentName>HIVESERVER2</componentName>
+              <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
+            </componentArtifact>
+            <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+              <componentName>ELASTICSEARCH</componentName>
+              <artifact>fr.jetoile.hadoop:hadoop-unit-elasticsearch:${hadoop-unit.version}</artifact>
+              <properties>
+                <elasticsearch.version>${elasticsearch.version}</elasticsearch.version>
+                <elasticsearch.download.url>
+                  https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/zip/elasticsearch/${elasticsearch.version}/elasticsearch-${elasticsearch.version}.zip
+                </elasticsearch.download.url>
+              </properties>
+            </componentArtifact>
+          </components>
+
+        </configuration>
+
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -1,0 +1,20 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Maven
+dependency-reduced-pom.xml
+target/
+
+# MAC
+.DS_Store
+
+# Other
+derby.log
+metastore_db
+
+# Eclipse
+*.project
+*.classpath
+*.settings/**

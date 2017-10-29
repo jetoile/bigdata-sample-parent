@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fr.jetoile.hadoop.sample</groupId>
+    <artifactId>bigdata-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
+  <packaging>pom</packaging>
+
+
+  <description>${artifactId} description</description>
+
+  <properties>
+    <${rootArtifactId}.version>${version}</${rootArtifactId}.version>
+    <bigdata-commons.version>1.0-SNAPSHOT</bigdata-commons.version>
+
+    <hadoop-unit.version>2.5</hadoop-unit.version>
+    <elasticsearch-spark.version>5.6.3</elasticsearch-spark.version>
+    <commons-configuration.version>1.10</commons-configuration.version>
+    <elasticsearch.version>5.6.3</elasticsearch.version>
+    <commons-io.version>2.5</commons-io.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}-job</artifactId>
+	      <version>${${rootArtifactId}.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop.sample</groupId>
+        <artifactId>bigdata-commons-conf</artifactId>
+	      <version>${bigdata-commons.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop.sample</groupId>
+        <artifactId>bigdata-commons-deploy</artifactId>
+	      <version>${bigdata-commons.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.elasticsearch</groupId>
+        <artifactId>elasticsearch-spark-20_2.11</artifactId>
+        <version>${elasticsearch-spark.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-client-hdfs</artifactId>
+        <version>${hadoop-unit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-client-hive</artifactId>
+        <version>${hadoop-unit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-commons</artifactId>
+        <version>${hadoop-unit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-configuration</groupId>
+        <artifactId>commons-configuration</artifactId>
+        <version>${commons-configuration.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+        <version>${elasticsearch.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+    </pluginManagement>
+  </build>
+
+</project>

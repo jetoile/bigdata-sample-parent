@@ -1,0 +1,62 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+  <id>deploy-dev</id>
+
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+
+  <fileSets>
+    <fileSet>
+      <!-- all files to deploy have to be into dist directory -->
+      <directory>${symbol_dollar}{project.build.outputDirectory}/dev/</directory>
+      <outputDirectory>/dist/</outputDirectory>
+      <excludes>
+        <exclude>deploy.properties</exclude>
+      </excludes>
+      <lineEnding>unix</lineEnding>
+    </fileSet>
+
+    <fileSet>
+      <directory>${symbol_dollar}{project.build.directory}/appassembler</directory>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>750</fileMode>
+      <directoryMode>750</directoryMode>
+    </fileSet>
+  </fileSets>
+
+  <dependencySets>
+    <dependencySet>
+      <!-- all files to deploy have to be into dist directory -->
+      <outputDirectory>/dist/lib/</outputDirectory>
+      <includes>
+        <include>
+          ${groupId}:${rootArtifactId}-job
+        </include>
+      </includes>
+      <useProjectArtifact>false</useProjectArtifact>
+      <scope>provided</scope>
+      <unpack>false</unpack>
+    </dependencySet>
+  </dependencySets>
+
+
+  <files>
+    <file>
+      <source>src/main/groovy/deploy.groovy</source>
+      <outputDirectory>bin</outputDirectory>
+    </file>
+
+    <file>
+      <source>${symbol_dollar}{project.build.directory}/classes/dev/deploy.properties</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+  </files>
+
+</assembly>

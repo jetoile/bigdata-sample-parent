@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>fr.jetoile.hadoop.sample</groupId>
+  <artifactId>bigdata-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <description>bigdata super pom</description>
+
+  <repositories>
+    <repository>
+      <id>hortonworks</id>
+      <name>hortonworks repo</name>
+      <url>http://repo.hortonworks.com/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <java.version>1.8</java.version>
+
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <slf4j-api.version>1.7.25</slf4j-api.version>
+    <logback-classic.version>1.2.3</logback-classic.version>
+
+    <spark.version>2.2.0.2.6.2.7-1</spark.version>
+    <spark-csv_2.11.version>1.5.0</spark-csv_2.11.version>
+
+    <scala.version>2.11.11</scala.version>
+
+    <groovy-all.version>2.4.12</groovy-all.version>
+    <gateway-shell.version>0.13.0</gateway-shell.version>
+    <oozie-client.version>4.2.0</oozie-client.version>
+    <groovy-common-extensions.version>0.7.0</groovy-common-extensions.version>
+    <commons-cli.version>1.4</commons-cli.version>
+
+    <scalatest.plugin.version>1.0</scalatest.plugin.version>
+    <scalatest.maven.plugin.version>1.0</scalatest.maven.plugin.version>
+    <scalatest.version>3.0.1</scalatest.version>
+    <scalastyle.plugin.version>0.8.0</scalastyle.plugin.version>
+
+    <scala.maven.plugin>3.3.1</scala.maven.plugin>
+
+    <maven.surefire.plugin>2.19.1</maven.surefire.plugin>
+    <maven.assembly.plugin>3.1.0</maven.assembly.plugin>
+    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+
+    <log4j.version>2.9.0</log4j.version>
+    <assertj-core.version>3.8.0</assertj-core.version>
+    <pegdown.version>1.2.1</pegdown.version>
+    <junit.version>3.8.1</junit.version>
+    <lombok.version>1.16.18</lombok.version>
+    <json4s-jackson_2.10.version>3.2.10</json4s-jackson_2.10.version>
+    <jcommander.version>1.48</jcommander.version>
+
+    <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
+    <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
+    <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+    <snappy-spark-tags_2.11.version>2.1.1.1</snappy-spark-tags_2.11.version>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <suffix.test>"(?&lt;!Integration)(Test|Case|Suite|Spec)"</suffix.test>
+        <suffix.it>"(?&lt;=Integration)(Test|Case|Suite|Spec)"</suffix.it>
+      </properties>
+    </profile>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <suffix.test>(?&lt;!Integration)(Test|Case|Suite|Spec)</suffix.test>
+        <suffix.it>(?&lt;=Integration)(Test|Case|Suite|Spec)</suffix.it>
+      </properties>
+    </profile>
+  </profiles>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_2.11</artifactId>
+      <version>${scalatest.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- required by scalatest-maven-plugin to generate HTML report -->
+    <dependency>
+      <groupId>org.pegdown</groupId>
+      <artifactId>pegdown</artifactId>
+      <version>${pegdown.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj-core.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback-classic.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-core_2.11</artifactId>
+        <version>${spark.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_2.11</artifactId>
+        <version>${spark.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-hive_2.11</artifactId>
+        <version>${spark.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.json4s</groupId>
+        <artifactId>json4s-jackson_2.10</artifactId>
+        <version>${json4s-jackson_2.10.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.beust</groupId>
+        <artifactId>jcommander</artifactId>
+        <version>${jcommander.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.databricks</groupId>
+        <artifactId>spark-csv_2.11</artifactId>
+        <version>${spark-csv_2.11.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>io.snappydata</groupId>
+        <artifactId>snappy-spark-unsafe_2.11</artifactId>
+        <version>${snappy-spark-tags_2.11.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.snappydata</groupId>
+        <artifactId>snappy-spark-tags_2.11</artifactId>
+        <version>${snappy-spark-tags_2.11.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>${commons-cli.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.oozie</groupId>
+        <artifactId>oozie-client</artifactId>
+        <version>${oozie-client.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>slf4j-simple</artifactId>
+            <groupId>org.slf4j</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>activemq-client</artifactId>
+            <groupId>org.apache.activemq</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>hadoop-core</artifactId>
+            <groupId>org.apache.hadoop</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.knox</groupId>
+        <artifactId>gateway-shell</artifactId>
+        <version>${gateway-shell.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>org.slf4j</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.bloidonia</groupId>
+        <artifactId>groovy-common-extensions</artifactId>
+        <version>${groovy-common-extensions.version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+
+    <testResources>
+      <testResource>
+        <directory>src/it/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.scalastyle</groupId>
+          <artifactId>scalastyle-maven-plugin</artifactId>
+          <version>${scalastyle.plugin.version}</version>
+          <configuration>
+            <verbose>false</verbose>
+            <failOnViolation>false</failOnViolation>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+            <failOnWarning>false</failOnWarning>
+            <sourceDirectory>${project.basedir}/src/main/scala</sourceDirectory>
+            <testSourceDirectory>${project.basedir}/src/test/scala</testSourceDirectory>
+            <configLocation>src/main/resources/scalastyle-config.xml</configLocation>
+            <outputFile>target/scalastyle-${project.name}-output.xml</outputFile>
+            <outputEncoding>UTF-8</outputEncoding>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven-shade-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <transformers>
+                  <!-- add Main-Class to manifest file -->
+                  <transformer
+                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>Main</mainClass>
+                  </transformer>
+                  <transformer
+                    implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                  <transformer
+                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                    <resource>META-INF/services/org.apache.lucene.codecs.Codec</resource>
+                  </transformer>
+                  <transformer
+                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                    <resource>META-INF/services/org.apache.lucene.codecs.DocValuesFormat</resource>
+                  </transformer>
+                  <transformer
+                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                    <resource>META-INF/services/org.apache.lucene.codecs.PostingsFormat</resource>
+                  </transformer>
+                </transformers>
+                <filters>
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>META-INF/*.SF</exclude>
+                      <exclude>META-INF/*.DSA</exclude>
+                      <exclude>META-INF/*.RSA</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+                <shadedClassifierName>uber</shadedClassifierName>
+                <shadedArtifactAttached>false</shadedArtifactAttached>
+              </configuration>
+
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven-resources-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/scala</source>
+                <source>src/it/scala</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--scalatest -->
+      <plugin>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest-maven-plugin</artifactId>
+        <version>${scalatest.maven.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>IntegrationTest</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <phase>integration-test</phase>
+            <configuration>
+              <suffixes>${suffix.it}</suffixes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>UnitTest</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <suffixes>${suffix.test}</suffixes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>${scala.maven.plugin}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <args>
+                <arg>-dependencyfile</arg>
+                <arg>${project.build.directory}/.scala_dependencies</arg>
+              </args>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.plugin}</version>
+        <configuration>
+          <useFile>false</useFile>
+          <disableXmlReport>true</disableXmlReport>
+          <!-- If you have classpath issue like NoDefClassError,... -->
+          <!-- useManifestOnlyJar>false</useManifestOnlyJar -->
+          <includes>
+            <include>**/*Test.*</include>
+            <include>**/*Suite.*</include>
+          </includes>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${maven-release-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven.assembly.plugin}</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

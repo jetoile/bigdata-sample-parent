@@ -1,0 +1,43 @@
+<coordinator-app name="sample"
+                 frequency="*/20 * * * *"
+                 start="${start_date}" end="${end_date}" timezone="Europe/Paris"
+                 xmlns="uri:oozie:coordinator:0.2">
+  <controls>
+    <execution>FIFO</execution>
+  </controls>
+  <action>
+    <workflow>
+      <app-path>${wf_application_path}</app-path>
+      <configuration>
+        <property>
+          <name>oozie.use.system.libpath</name>
+          <value>True</value>
+        </property>
+        <property>
+          <name>start_date</name>
+          <value>${start_date}</value>
+        </property>
+        <property>
+          <name>end_date</name>
+          <value>${end_date}</value>
+        </property>
+        <property>
+          <name>oozie.mail.to</name>
+          <value>${oozie.mail.to}</value>
+        </property>
+        <property>
+          <name>oozie.mail.cc</name>
+          <value>${oozie.mail.cc}</value>
+        </property>
+        <property>
+          <name>oozie.mail.subject</name>
+          <value>${oozie.mail.subject}</value>
+        </property>
+        <property>
+          <name>end_date</name>
+          <value>${oozie.mail.body}</value>
+        </property>
+      </configuration>
+    </workflow>
+  </action>
+</coordinator-app>

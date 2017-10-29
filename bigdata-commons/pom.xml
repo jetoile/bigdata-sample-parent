@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fr.jetoile.hadoop.sample</groupId>
+    <artifactId>bigdata-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../bigdata-parent</relativePath>
+  </parent>
+
+  <groupId>fr.jetoile.hadoop.sample</groupId>
+  <artifactId>bigdata-commons</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <description>bigdata commons</description>
+
+  <modules>
+    <module>bigdata-commons-conf</module>
+    <module>bigdata-commons-deploy</module>
+  </modules>
+
+  <properties>
+    <gmaven.version>1.5</gmaven.version>
+    <gmavenProviderSelection>2.0</gmavenProviderSelection>
+
+    <bigdata-commons.version>${project.version}</bigdata-commons.version>
+
+
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop.sample</groupId>
+        <artifactId>bigdata-commons-conf</artifactId>
+        <version>${bigdata-commons.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fr.jetoile.hadoop.sample</groupId>
+        <artifactId>bigdata-commons-deploy</artifactId>
+        <version>${bigdata-commons.version}</version>
+      </dependency>
+
+
+
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.gmaven</groupId>
+          <artifactId>gmaven-plugin</artifactId>
+          <version>${gmaven.version}</version>
+          <configuration>
+            <providerSelection>${gmavenProviderSelection}</providerSelection>
+            <sourceEncoding>UTF-8</sourceEncoding>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-all</artifactId>
+              <version>${groovy-all.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.gmaven</groupId>
+          <artifactId>groovy-maven-plugin</artifactId>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-all</artifactId>
+              <version>${groovy-all.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+</project>

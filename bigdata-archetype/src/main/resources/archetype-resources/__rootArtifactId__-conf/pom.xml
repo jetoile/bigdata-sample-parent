@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>${rootArtifactId}</artifactId>
+    <groupId>${groupId}</groupId>
+    <version>${version}</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>${artifactId}</artifactId>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>fr.jetoile.hadoop.sample</groupId>
+      <artifactId>bigdata-commons-deploy</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-job</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>fr.jetoile.hadoop.sample</groupId>
+      <artifactId>bigdata-commons-conf</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.oozie</groupId>
+      <artifactId>oozie-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.knox</groupId>
+      <artifactId>gateway-shell</artifactId>
+    </dependency>
+
+    <!--<dependency>-->
+    <!--<groupId>org.apache.knox</groupId>-->
+    <!--<artifactId>gateway-service-webhdfs</artifactId>-->
+    <!--<version>${gateway-shell.version}</version>-->
+    <!--</dependency>-->
+
+    <dependency>
+      <groupId>com.bloidonia</groupId>
+      <artifactId>groovy-common-extensions</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>fr.jetoile.hadoop.sample</groupId>
+                  <artifactId>bigdata-commons-conf</artifactId>
+                  <type>jar</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.directory}/global-conf</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy-all.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>dev-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/dev</outputDirectory>
+              <filters>
+                <filter>${basedir}/src/main/filters/dev/conf.properties</filter>
+                <filter>${project.build.directory}/global-conf/dev/conf.properties</filter>
+              </filters>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prod-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/prod</outputDirectory>
+              <filters>
+                <filter>${basedir}/src/main/filters/prd/conf.properties</filter>
+                <filter>${project.build.directory}/global-conf/prd/conf.properties</filter>
+              </filters>
+            </configuration>
+          </execution>
+          <execution>
+            <id>test-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/test</outputDirectory>
+              <filters>
+                <filter>${basedir}/src/main/filters/test/conf.properties</filter>
+                <filter>${project.build.directory}/global-conf/test/conf.properties</filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <copyConfigurationDirectory>true</copyConfigurationDirectory>
+          <configurationDirectory>conf</configurationDirectory>
+          <configurationSourceDirectory>src/main/resources/local-conf</configurationSourceDirectory>
+          <!--<extraJvmArguments>-->
+            <!-- -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n-->
+          <!--</extraJvmArguments>-->
+          <programs>
+            <program>
+              <mainClass>Main</mainClass>
+              <name>main</name>
+            </program>
+          </programs>
+          <repositoryLayout>flat</repositoryLayout>
+          <binFileExtensions>
+            <unix>.sh</unix>
+          </binFileExtensions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>deploy-dev</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/descriptor-deploy-run-dev.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
+            <id>deploy-prd</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/descriptor-deploy-run-prd.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
+            <id>deploy-test</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/descriptor-deploy-run-test.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create-timestamp</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <timestampFormat>yyyy-MM-dd'T'HH:mmZ</timestampFormat>
+          <timestampPropertyName>build.date</timestampPropertyName>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+
+</project>

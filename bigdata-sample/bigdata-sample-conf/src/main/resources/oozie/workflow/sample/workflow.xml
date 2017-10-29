@@ -1,0 +1,45 @@
+<workflow-app name="sample" xmlns="uri:oozie:workflow:0.5">
+  <global>
+    <configuration>
+      <property>
+        <name>mapred.job.queue.name</name>
+        <value>@sample.queue@</value>
+      </property>
+    </configuration>
+  </global>
+  <start to="start"/>
+  <kill name="kill">
+    <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+  <action name="kill-email">
+    <email xmlns="uri:oozie:email-action:0.2">
+      <to>${oozie.mail.to}</to>
+      <cc>${oozie.mail.cc}</cc>
+      <subject>${oozie.mail.subject}</subject>
+      <body>${oozie.mail.body}</body>
+    </email>
+    <ok to="kill"/>
+    <error to="kill"/>
+  </action>
+  <action name="start">
+    <spark xmlns="uri:oozie:spark-action:0.2">
+      <job-tracker>${jobTracker}</job-tracker>
+      <name-node>${nameNode}</name-node>
+      <master>yarn</master>
+      <mode>cluster</mode>
+      <name>sampleSpark</name>
+      <class>fr.jetoile.hadoop.sample.Main</class>
+      <jar>${nameNode}/@hdfs.path@/share/lib/bigdata-sample-job-@project.version@.jar</jar>
+      <spark-opts>--num-executors 5 --driver-memory 8g --executor-memory 30g --executor-cores 8 --queue @sample.queue@</spark-opts>
+      <arg>-p</arg>
+      <arg>@commons.nameNode@@input.path@</arg>
+      <arg>-i</arg>
+      <arg>sampleIndex</arg>
+      <arg>-d</arg>
+      <arg>sampleDoc</arg>
+    </spark>
+    <ok to="End"/>
+    <error to="kill-email"/>
+  </action>
+  <end name="End"/>
+</workflow-app>

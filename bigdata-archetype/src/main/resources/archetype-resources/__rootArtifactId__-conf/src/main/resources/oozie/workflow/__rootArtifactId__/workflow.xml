@@ -1,0 +1,48 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<workflow-app name="sample" xmlns="uri:oozie:workflow:0.5">
+  <global>
+    <configuration>
+      <property>
+        <name>mapred.job.queue.name</name>
+        <value>@sample.queue@</value>
+      </property>
+    </configuration>
+  </global>
+  <start to="start"/>
+  <kill name="kill">
+    <message>Action failed, error message[${symbol_dollar}{wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+  <action name="kill-email">
+    <email xmlns="uri:oozie:email-action:0.2">
+      <to>${symbol_dollar}{toto}</to>
+      <cc>other-cconner@test.com</cc>
+      <subject>WF ${symbol_dollar}{wf:id()} failed</subject>
+      <body>Shell action failed.</body>
+    </email>
+    <ok to="kill"/>
+    <error to="kill"/>
+  </action>
+  <action name="start">
+    <spark xmlns="uri:oozie:spark-action:0.2">
+      <job-tracker>${symbol_dollar}{jobTracker}</job-tracker>
+      <name-node>${symbol_dollar}{nameNode}</name-node>
+      <master>yarn</master>
+      <mode>cluster</mode>
+      <name>sampleSpark</name>
+      <class>${package}.Main</class>
+      <jar>${symbol_dollar}{nameNode}/@hdfs.path@/share/lib/${parentArtifactId}-job-@project.version@.jar</jar>
+      <spark-opts>--num-executors 5 --driver-memory 8g --executor-memory 30g --executor-cores 8 --queue @sample.queue@</spark-opts>
+      <arg>-p</arg>
+      <arg>@commons.nameNode@@input.path@</arg>
+      <arg>-i</arg>
+      <arg>sampleIndex</arg>
+      <arg>-d</arg>
+      <arg>sampleDoc</arg>
+    </spark>
+    <ok to="End"/>
+    <error to="kill-email"/>
+  </action>
+  <end name="End"/>
+</workflow-app>

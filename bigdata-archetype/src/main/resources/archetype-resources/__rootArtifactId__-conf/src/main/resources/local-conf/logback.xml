@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %d{HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </layout>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>debug.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </encoder>
+  </appender>
+
+
+  <logger name="deploy.groovy" level="debug" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+  <logger name="lib.groovy" level="debug" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <root level="debug">
+    <appender-ref ref="FILE"/>
+  </root>
+
+</configuration>
