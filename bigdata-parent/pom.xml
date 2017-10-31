@@ -407,6 +407,7 @@
             <phase>integration-test</phase>
             <configuration>
               <suffixes>${suffix.it}</suffixes>
+              <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
             </configuration>
           </execution>
           <execution>
@@ -417,6 +418,7 @@
             <phase>test</phase>
             <configuration>
               <suffixes>${suffix.test}</suffixes>
+              <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
             </configuration>
           </execution>
         </executions>
