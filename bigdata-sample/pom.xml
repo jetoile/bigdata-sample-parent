@@ -25,7 +25,7 @@
 
   <properties>
     <bigdata-sample.version>1.0-SNAPSHOT</bigdata-sample.version>
-    <hadoop-unit.version>2.5</hadoop-unit.version>
+    <hadoop-unit.version>2.6</hadoop-unit.version>
     <elasticsearch-spark.version>5.6.3</elasticsearch-spark.version>
     <commons-configuration.version>1.10</commons-configuration.version>
     <elasticsearch.version>5.6.3</elasticsearch.version>

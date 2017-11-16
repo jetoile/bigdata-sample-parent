@@ -59,7 +59,7 @@ class SimpleJobIntegrationTest extends FeatureSpec with BeforeAndAfterAll with B
 
     fileSystem.copyFromLocalFile(new Path(SimpleJobIntegrationTest.this.getClass.getClassLoader.getResource("simplefile.csv").toURI), new Path(hdfsPath + inputCsvPath + "/simplefile.csv"))
 
-    val sparkSession = SparkSession.builder.appName("test").master("local[*]").enableHiveSupport.getOrCreate
+    val sparkSession = SparkSession.builder.appName("test").master("local[*]").config("hive.metastore.uris", "thrift://localhost:20102").enableHiveSupport.getOrCreate
 
     val dataFrame = sparkSession.read.format("com.databricks.spark.csv")
       .option("header", "true")
@@ -82,7 +82,7 @@ class SimpleJobIntegrationTest extends FeatureSpec with BeforeAndAfterAll with B
     scenario("read data") {
 
       Given("a local spark conf")
-      val sparkSession = SparkSession.builder.appName("test").master("local[*]").enableHiveSupport.getOrCreate
+      val sparkSession = SparkSession.builder.appName("test").master("local[*]").config("hive.metastore.uris", "thrift://localhost:20102").enableHiveSupport.getOrCreate
 
       And("my job")
       val job = new SimpleJob(sparkSession)
@@ -108,6 +108,7 @@ class SimpleJobIntegrationTest extends FeatureSpec with BeforeAndAfterAll with B
         .config("es.nodes", configuration.getString(ELASTICSEARCH_IP_KEY))
         .config("es.port", configuration.getString(ELASTICSEARCH_HTTP_PORT_KEY))
         .config("es.nodes.wan.only", "true")
+        .config("hive.metastore.uris", "thrift://localhost:20102")
         .enableHiveSupport
         .getOrCreate
 
@@ -138,7 +139,7 @@ class SimpleJobIntegrationTest extends FeatureSpec with BeforeAndAfterAll with B
     scenario("create external table") {
 
       Given("a local spark conf")
-      val sparkSession = SparkSession.builder.appName("test").master("local[*]").enableHiveSupport.getOrCreate
+      val sparkSession = SparkSession.builder.appName("test").master("local[*]").config("hive.metastore.uris", "thrift://localhost:20102").enableHiveSupport.getOrCreate
 
       And("my job")
       val job = new SimpleJob(sparkSession)
