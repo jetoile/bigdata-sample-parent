@@ -138,7 +138,7 @@
               <goal>resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.outputDirectory}/prod</outputDirectory>
+              <outputDirectory>${project.build.outputDirectory}/prd</outputDirectory>
               <filters>
                 <filter>${basedir}/src/main/filters/prd/conf.properties</filter>
                 <filter>${project.build.directory}/global-conf/prd/conf.properties</filter>
